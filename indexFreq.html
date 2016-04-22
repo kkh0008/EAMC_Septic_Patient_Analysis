@@ -1,62 +1,98 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>Data Visualization Project II</title>
-	<link href="css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="style.css"/>
-	<meta name="description" content="Auburn University INSY4970 Lab">
-	<script src="//d3js.org/d3.v3.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-		   
-<title>Gantt Chart Frequency Failure</title>
-<link type="text/css" href="http://mbostock.github.io/d3/style.css" rel="stylesheet" />
-<link type="text/css" href="cssFreq.css" rel="stylesheet" />
-
-</head>
-<body>
-<div class="row">
-	<center><h1>CMS Measure Failure Time Windows</h1></center>
-</div>
-
-       
-       <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-	<script type="text/javascript" src="http://static.mentful.com/gantt-chart-d3v2.js"></script>
-	
-<script type="text/javascript" src="dataFreq.js"></script>
-       
-<div class="navbar-inverse navbar-default navbar-fixed-top" role="navigation">
-	<div class="container-fluid">
-        <div class="navbar-header">
-          <button id="menu-toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar bar1"></span>
-                    <span class="icon-bar bar2"></span>
-                    <span class="icon-bar bar3"></span>
-           </button>
-          <a class="navbar-brand">Karis, Connor, Will</a>
-        </div>
-		<div class="collapse navbar-collapse">
-			<ul class="nav navbar-nav navbar-right">
-				 
-				<li class="dropdown>">
-					<a href="#" class="dropdown-toggle link" data-toggle="dropdown">Visualizations<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="index.html">Project Home</a></li>
-						<li><a href="#">Parallel Coordinates Plot</a></li>
-						<li><a href="index1.html"">Horizontal Bar Chart</a></li>
-						<li><a href="indexFreq.html">Gantt Chart</a></li>
-					</ul>
-				</li>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1"> 
+		<title>Data Visualization Project II</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="style.css"/>
+		<meta name="description" content="Auburn University INSY4970 Lab">
+		<script src="//d3js.org/d3.v3.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		
+		<title>Gantt Chart Frequency Failure</title>
+		<link type="text/css" href="http://mbostock.github.io/d3/style.css" rel="stylesheet" />
+		<link type="text/css" href="cssFreq.css" rel="stylesheet" />
+		
+	</head>
+	<body>
+		
+		<div class="row">
+			<center><h1>CMS Measure Failure Time Windows</h1></center>
+		</div>
+		
+		<select class="form-control" id="sel1" onChange="updateGraph();">
+			<option value="1">Frequency All</option>
+			<option value="2">Fluids</option>
+			<option value="3">3 Hour Measures</option>
+			<option value="4">Repeat Volume & Tissue Perf</option>
+			<option value="5">Repeat Lactate</option>
+		</select>
+		
+		<script>
+			window.onload = function() {
+				chartOne();
+			};
+			function updateGraph(){
+				var option = document.getElementById("sel1").value
+				document.getElementById("svgid").remove()
 				
-				<li></li>
-			</ul>
-        </div>
-    </div>
-</div>
-
-</body>
+				if (option == 1){
+					chartOne();
+				}
+				
+				if (option==2){
+					chartTwo();
+					
+				}
+				if (option ==3){
+					chartThree();
+					}
+				if (option == 4){
+					chartFour();
+					}
+				if (option == 5){
+					chartFive();
+					}
+			};
+		</script>
+		
+		<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+		<script type="text/javascript" src="gantchart.js"></script>
+		
+		<script type="text/javascript" src="dataFreq.js"></script>
+		
+		<div class="navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button id="menu-toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar bar1"></span>
+						<span class="icon-bar bar2"></span>
+						<span class="icon-bar bar3"></span>
+					</button>
+					<a class="navbar-brand">Karis, Connor, Will</a>
+				</div>
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav navbar-right">
+						
+						<li class="dropdown>">
+							<a href="#" class="dropdown-toggle link" data-toggle="dropdown">Visualizations<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="index.html">Project Home</a></li>
+								<li><a href="index2.html">Parallel Coordinates Plot</a></li>
+								<li><a href="index1.html"">Horizontal Bar Chart</a></li>
+								<li><a href="indexFreq.html">Gantt Chart</a></li>
+							</ul>
+						</li>
+						
+						<li></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		
+	</body>
 </html>
