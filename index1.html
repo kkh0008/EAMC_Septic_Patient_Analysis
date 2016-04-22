@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Data Visualization Project II</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<meta name="description" content="Auburn University INSY4970 Lab">
+	<script src="//d3js.org/d3.v3.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<style>
+	#xaxis .domain {
+		fill:none;
+		stroke:#000;
+	}
+	#xaxis text, #yaxis text {
+		font-size: 14px;
+	}
+	h1{ 
+	margin-left: -122px;
+	}
+	</style>
+</head>
+<body>
+	
+<div class="navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+	<div class="container-fluid">
+        <div class="navbar-header">
+          <button id="menu-toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar bar1"></span>
+                    <span class="icon-bar bar2"></span>
+                    <span class="icon-bar bar3"></span>
+           </button>
+          <a class="navbar-brand">Karis, Connor, Will</a>
+        </div>
+		<div class="collapse navbar-collapse">
+			<ul class="nav navbar-nav navbar-right">
+				 
+				<li class="dropdown>">
+					<a href="#" class="dropdown-toggle link" data-toggle="dropdown">Visualizations<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="index.html">Project Home</a></li>
+						<li><a href="#">Parallel Coordinates Plot</a></li>
+						<li><a href="index1.html"">Horizontal Bar Chart</a></li>
+						<li><a href="indexFreq.html">Gantt Chart</a></li>
+					</ul>
+				</li>
+				
+				<li></li>
+			</ul>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+<div class="container-fluid">
+
+</div>
+</div>
+<div class="row">
+	<center><h1>East Alabama Medical Center's Septic Patient Outcomes</h1></center>
+</div>
+	<div class="col-md-8" id="wrapper">
+	</div>
+	<div class="col-md-2" id="sel1wrapper">
+	<select class="form-control" id="sel1" onChange="updateGraph();">
+<option value="1">%Passing CMS</option>
+<option value="2">%Expiring</option>
+</select>
+	</div>
+	
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script>
+	window.onload = function() {
+		chartOne();
+		};
+		function updateGraph(){
+		var option = document.getElementById("sel1").value
+		document.getElementById("svgid").remove()
+		
+		if (option == 1){
+			chartOne();
+		}
+		else{
+		 chartTwo();
+		
+		}
+		
+		
+		
+		};
+		function chartOne(){
+		
+		var categories= ['','Severe Sepsis Patients', 'Septic Shock Patients', 'Male', 'Female', '18-65','65+'];
+
+		var dollars = [49.8,4.6,33.4,32.0,40.0,27.0];
+
+		var colors = ['#41A317'];
+
+		var grid = d3.range(25).map(function(i){
+			return {'x1':0,'y1':0,'x2':0,'y2':480};
+		});
+
+		var tickVals = grid.map(function(d,i){
+			if(i>0){ return i*10; }
+			else if(i===0){ return "100";}
+		});
+
+		var xscale = d3.scale.linear()
+						.domain([0,100])
+						.range([0,722]);
+						
+					
+
+		var yscale = d3.scale.linear()
+						.domain([0,categories.length])
+						.range([0,574]);
+
+		var colorScale = d3.scale.quantize()
+						.domain([0,categories.length])
+						.range(colors);
+
+		var canvas = d3.select('#wrapper')
+						.append('svg')
+						.attr({'width':900,'height':550})
+						.attr("id","svgid");
+
+		var grids = canvas.append('g')
+						  .attr('id','grid')
+						  .attr('transform','translate(150,10)')
+						  .selectAll('line')
+						  .data(grid)
+						  .enter()
+						  .append('line')
+						  .attr({'x1':function(d,i){ return i*36.15; },
+								 'y1':function(d){ return d.y1; },
+								 'x2':function(d,i){ return i*36.15; },
+								 'y2':function(d){ return d.y2; },
+							})
+						  .style({'stroke':'#adadad','stroke-width':'1px'});
+
+		var	xAxis = d3.svg.axis();
+			xAxis
+				.orient('bottom')
+				.scale(xscale)
+				.tickValues(tickVals);
+					
+		var	yAxis = d3.svg.axis();
+			yAxis
+				.orient('left')
+				.scale(yscale)
+				.tickSize(2)
+				.tickFormat(function(d,i){ return categories[i]; })
+				.tickValues(d3.range(17));
+
+		var y_xis = canvas.append('g')
+						  .attr("transform", "translate(150,-39)")
+						  .attr('id','yaxis')
+						  .call(yAxis);
+
+		var x_xis = canvas.append('g')
+						  .attr("transform", "translate(150,480)")
+						  .attr('id','xaxis')
+						  .call(xAxis);
+
+		var chart = canvas.append('g')
+							.attr("transform", "translate(150,0)")
+							.attr('id','bars')
+							.selectAll('rect')
+							.data(dollars)
+							.enter()
+							.append('rect')
+							.attr('height',50)
+							.attr({'x':0,'y':function(d,i){ return yscale(i)+ 19; }})
+							.style('fill',function(d,i){ return colorScale(i+1); })
+							.attr('width',function(d){ return 0; });
+
+
+		var transit = d3.select("svg").selectAll("rect")
+						    .data(dollars)
+						    .transition()
+						    .duration(1000) 
+						    .attr("width", function(d) {return xscale(d); });
+
+		var transitext = d3.select('#bars')
+							.selectAll('text')
+							.data(dollars)
+							.enter()
+							.append('text')
+							.attr({'x':function(d) {return xscale(d)-30; },'y':function(d,i){ return yscale(i)+46; }})
+							.text(function(d){ return d+"%"; }).style({'fill':'#fff','font-size':'12px'});
+		
+
+	}
+	
+	function chartTwo(){
+	
+	var categories= ['','Severe Sepsis Patients', 'Septic Shock Patients', 'Male', 'Female', '18-65','65+'];
+
+		var dollars = [11.8,46.2,22.7,28.0,17.8,30.0];
+
+		var colors = ['#493D26'];
+
+		var grid = d3.range(25).map(function(i){
+			return {'x1':0,'y1':0,'x2':0,'y2':480};
+		});
+
+		var tickVals = grid.map(function(d,i){
+			if(i>0){ return i*10; }
+			else if(i===0){ return "100";}
+		});
+
+		var xscale = d3.scale.linear()
+						.domain([0,100])
+						.range([0,722]);
+
+		var yscale = d3.scale.linear()
+						.domain([0,categories.length])
+						.range([0,574]);
+
+		var colorScale = d3.scale.quantize()
+						.domain([0,categories.length])
+						.range(colors);
+
+		var canvas = d3.select('#wrapper')
+						.append('svg')
+						.attr({'width':900,'height':550})
+						.attr("id","svgid");
+
+		var grids = canvas.append('g')
+						  .attr('id','grid')
+						  .attr('transform','translate(150,10)')
+						  .selectAll('line')
+						  .data(grid)
+						  .enter()
+						  .append('line')
+						  .attr({'x1':function(d,i){ return i*36.15; },
+								 'y1':function(d){ return d.y1; },
+								 'x2':function(d,i){ return i*36.15; },
+								 'y2':function(d){ return d.y2; },
+							})
+						  .style({'stroke':'#adadad','stroke-width':'1px'});
+
+		var	xAxis = d3.svg.axis();
+			xAxis
+				.orient('bottom')
+				.scale(xscale)
+				.tickValues(tickVals);
+
+		var	yAxis = d3.svg.axis();
+			yAxis
+				.orient('left')
+				.scale(yscale)
+				.tickSize(2)
+				.tickFormat(function(d,i){ return categories[i]; })
+				.tickValues(d3.range(17));
+
+		var y_xis = canvas.append('g')
+						  .attr("transform", "translate(150,-39)")
+						  .attr('id','yaxis')
+						  .call(yAxis);
+
+		var x_xis = canvas.append('g')
+						  .attr("transform", "translate(150,480)")
+						  .attr('id','xaxis')
+						  .call(xAxis);
+
+		var chart = canvas.append('g')
+							.attr("transform", "translate(150,0)")
+							.attr('id','bars')
+							.selectAll('rect')
+							.data(dollars)
+							.enter()
+							.append('rect')
+							.attr('height',50)
+							.attr({'x':0,'y':function(d,i){ return yscale(i)+ 19; }})
+							.style('fill',function(d,i){ return colorScale(i); })
+							.attr('width',function(d){ return 0; });
+
+
+		var transit = d3.select("svg").selectAll("rect")
+						    .data(dollars)
+						    .transition()
+						    .duration(1000) 
+						    .attr("width", function(d) {return xscale(d); });
+
+		var transitext = d3.select('#bars')
+							.selectAll('text')
+							.data(dollars)
+							.enter()
+							.append('text')
+							.attr({'x':function(d) {return xscale(d)-30; },'y':function(d,i){ return yscale(i)+46; }})
+							.text(function(d){ return d+"%"; }).style({'fill':'#fff','font-size':'12px'});
+	
+	
+	};
+	</script>
+</body>
+</html>
