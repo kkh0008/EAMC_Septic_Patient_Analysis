@@ -16,11 +16,17 @@
 		<link type="text/css" href="http://mbostock.github.io/d3/style.css" rel="stylesheet" />
 		<link type="text/css" href="cssFreq.css" rel="stylesheet" />
 		
+	<style>
+		h1{
+		margin-top: -30px;
+		}
+		
+	</style>
 	</head>
 	<body>
-		
+
 		<div class="row">
-			<center><h1>CMS Measure Failure Time Windows</h1></center>
+			<center><h1>CMS Measure: Failure Time Windows</h1></center>
 		</div>
 		
 		<select class="form-control" id="sel1" onChange="updateGraph();">
@@ -30,6 +36,7 @@
 			<option value="4">Repeat Volume & Tissue Perf</option>
 			<option value="5">Repeat Lactate</option>
 		</select>
+		
 		
 		<script>
 			window.onload = function() {
@@ -93,6 +100,6 @@
 				</div>
 			</div>
 		</div>
-		
+	
 	</body>
 </html>
